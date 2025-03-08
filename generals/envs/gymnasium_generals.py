@@ -73,6 +73,8 @@ class GymnasiumGenerals(gym.Env):
         self.observation_space = self._create_observation_space()
         self.action_space = self._create_action_space()
 
+        print("Initialized GymnasiumGenerals!")
+
     def _setup_agent_data(self) -> dict[str, dict[str, Any]]:
         """Set up initial data for each agent."""
         colors = [(255, 107, 108), (0, 130, 255)]
