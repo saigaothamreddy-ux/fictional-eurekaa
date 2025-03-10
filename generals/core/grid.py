@@ -118,6 +118,7 @@ class GridFactory:
         max_grid_dims: tuple[int, int] = DEFAULT_MAX_GRID_DIM,
         mountain_density: float = DEFAULT_MOUNTAIN_DENSITY,
         city_density: float = DEFAULT_CITY_DENSITY,
+        min_generals_distance: int = MIN_GENERALS_DISTANCE,
         general_positions: list[tuple[int, int]] | None = None,
         seed: int | None = None,
     ):
@@ -139,6 +140,7 @@ class GridFactory:
         self.mountain_density = mountain_density
         self.city_density = city_density
         self.general_positions = general_positions
+        self.min_generals_distance = min_generals_distance
         assert self.mode in ["uniform", "generalsio"], f"Invalid mode: {self.mode}"
 
     def set_rng(self, rng: np.random.Generator):
@@ -202,9 +204,9 @@ class GridFactory:
         g2 = None
         for _ in range(max_attempts):
             candidate_g2 = (self.rng.integers(grid_height), self.rng.integers(grid_width))
-            if distances_from_g1[candidate_g2] >= MIN_GENERALS_DISTANCE and distances_from_g1[candidate_g2] != float(
-                "inf"
-            ):
+            if distances_from_g1[candidate_g2] >= self.min_generals_distance and distances_from_g1[
+                candidate_g2
+            ] != float("inf"):
                 g2 = candidate_g2
                 break
 

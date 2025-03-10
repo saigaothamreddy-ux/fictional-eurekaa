@@ -35,7 +35,7 @@ class Channels:
         # City costs are 40 + digit in the cell
         city_costs = np.where(np.char.isdigit(grid), grid, "0").astype(np.int16)
         city_costs += np.where(grid == "x", 10, 0)
-        self.armies += 20 * self.cities + city_costs
+        self.armies += 40 * self.cities + city_costs
 
     def get_visibility(self, agent_id: str) -> np.ndarray:
         channel = self._ownership[agent_id]
