@@ -98,30 +98,30 @@ def compute_valid_move_mask(observation: Observation) -> np.ndarray:
         
         if len(passable_destinations) > 0:
             # Get source cells corresponding to passable destinations
-            source_cells = passable_destinations - direction.value
+            # source_cells = passable_destinations - direction.value
             
-            # Get armies at source and destination
-            source_armies = observation.armies[source_cells[:, 0], source_cells[:, 1]]
-            dest_armies = observation.armies[passable_destinations[:, 0], passable_destinations[:, 1]]
+            # # Get armies at source and destination
+            # source_armies = observation.armies[source_cells[:, 0], source_cells[:, 1]]
+            # dest_armies = observation.armies[passable_destinations[:, 0], passable_destinations[:, 1]]
             
             # Check if destination is a city or general with enough armies to block
-            is_city = observation.cities[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
-            is_general = observation.generals[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
-            is_opponent = observation.opponent_cells[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
-            is_neutral = observation.neutral_cells[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
-            has_enough_army = dest_armies - 1 >= source_armies
+            # is_city = observation.cities[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
+            # is_general = observation.generals[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
+            # is_opponent = observation.opponent_cells[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
+            # is_neutral = observation.neutral_cells[passable_destinations[:, 0], passable_destinations[:, 1]] == 1
+            # has_enough_army = dest_armies - 1 >= source_armies
             
             # A destination is valid if it's not:
             # (a city AND neutral AND has enough army) OR
             # (opponent owned AND (city OR general) AND has enough army)
-            cant_pass_expensive_city = is_city & is_neutral & has_enough_army
-            cant_pass_expensive_enemy = is_opponent & (is_city | is_general) & has_enough_army
-            valid_destination_mask = ~(cant_pass_expensive_city | cant_pass_expensive_enemy)
-            valid_destinations = passable_destinations[valid_destination_mask]
+            # cant_pass_expensive_city = is_city & is_neutral & has_enough_army
+            # cant_pass_expensive_enemy = is_opponent & is_general & has_enough_army
+            # valid_destination_mask = ~(cant_pass_expensive_enemy)
+            # valid_destinations = passable_destinations[valid_destination_mask]
             
             # get valid action mask for a given direction
-            if len(valid_destinations) > 0:
-                valid_source_indices = valid_destinations - direction.value
+            if len(passable_destinations) > 0:
+                valid_source_indices = passable_destinations - direction.value
                 valid_action_mask[valid_source_indices[:, 0], valid_source_indices[:, 1], channel_index] = 1.0
 
     return valid_action_mask
