@@ -237,6 +237,22 @@ class GridFactory:
         # Place remaining cities
         self._place_cities(map, cities_to_place)
 
+        # Calculate number of passable cells in radius 5 of both generals
+        radius = 5
+
+        # Use the distance maps we already calculated
+        mask_radius_g1 = create_distance_mask(distances_from_g1, radius)
+        mask_radius_g2 = create_distance_mask(distances_from_g2, radius)
+        
+        # Count passable cells (not mountains or cities) within radius
+        passable_mask = (map == PASSABLE)
+        passable_cells_g1 = np.sum(mask_radius_g1 & passable_mask)
+        passable_cells_g2 = np.sum(mask_radius_g2 & passable_mask)
+
+        if abs(passable_cells_g1 - passable_cells_g2) > 10:
+            return self.generate_generalsio_grid()
+
+
         for i, idx in enumerate(general_positions):
             map[idx[0], idx[1]] = chr(ord("A") + i)
 
