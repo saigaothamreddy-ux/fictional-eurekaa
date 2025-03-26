@@ -252,7 +252,6 @@ class GridFactory:
         if abs(passable_cells_g1 - passable_cells_g2) > 10:
             return self.generate_generalsio_grid()
 
-
         for i, idx in enumerate(general_positions):
             map[idx[0], idx[1]] = chr(ord("A") + i)
 
