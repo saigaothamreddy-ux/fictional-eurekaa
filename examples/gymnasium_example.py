@@ -22,7 +22,9 @@ observations, infos = envs.reset()
 terminated = [False] * len(observations)
 truncated = [False] * len(observations)
 
-while True:
+import time
+start_time = time.time()
+for i in range(40000):
     agent_actions = [envs.single_action_space.sample() for _ in range(n_envs)]
     npc_actions = [envs.single_action_space.sample() for _ in range(n_envs)]
 
@@ -30,5 +32,7 @@ while True:
     actions = np.stack([agent_actions, npc_actions], axis=1)
     observations, rewards, terminated, truncated, infos = envs.step(actions)
     masks = [np.stack([infos[agent_name]["masks"] for agent_name in agent_names])]
-    if any(terminated) or any(truncated):
-        break
+    # if any(terminated) or any(truncated):
+    #     break
+end_time = time.time()
+print(f"Time taken: {end_time - start_time} seconds")
