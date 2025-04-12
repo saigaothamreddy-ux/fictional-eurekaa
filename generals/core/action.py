@@ -1,54 +1,11 @@
+from typing import TypeAlias
+
 import numpy as np
 
-from generals.core.config import DIRECTIONS, Direction
+from generals.core.config import DIRECTIONS
+from generals.core.observation import Observation
 
-from .observation import Observation
-
-
-class Action(np.ndarray):
-    """
-    Action objects walk & talk like typical numpy-arrays, but have a more descriptive and narrow interface.
-    """
-
-    def __new__(cls, to_pass: bool, row: int = 0, col: int = 0, direction: int | Direction = 0, to_split: bool = False):
-        """
-        Args:
-            cls: This argument is automatically provided by Python and is the Action class.
-            to_pass: Indicates whether the agent should pass/skip this turn i.e. do nothing. If to_pass is True,
-                the other arguments, like row & col, are effectively ignored.
-            row: The row the agent should move from. In the closed-interval: [0, (grid_height - 1)].
-            col: The column the agent should move from. In the closed-interval: [0, (grid_width - 1)].
-            direction: The direction the agent should move from the tile (row, col). Can either pass an enum-member
-                of Directions or the integer representation of the direction, which is the relevant index into the
-                config.DIRECTIONS array.
-            to_split: Indicates whether the army in (row, col) should be split, then moved in direction.
-        """
-        if isinstance(direction, Direction):
-            direction = DIRECTIONS.index(direction)
-
-        # Note: np.array.view casts the np.array object to type cls, i.e. Action, without modifying
-        # any of the arrays internal representation.
-        action_array = np.array([to_pass, row, col, direction, to_split], dtype=np.int8).view(cls)
-        return action_array
-
-    def is_pass(self) -> bool:
-        return self[0] == 1
-
-    def is_split(self) -> bool:
-        return self[4] == 1
-
-    def __str__(self) -> str:
-        if self.is_pass():
-            return "Action(pass)"
-
-        direction_str = DIRECTIONS[self[3]].name.lower()
-        row, col = self[1], self[2]
-        if self.is_split():
-            return f"Action(split-move {direction_str} from ({row}, {col}))"
-        return f"Action(move {direction_str} from ({row}, {col}))"
-
-    def __repr__(self) -> str:
-        return str(self)
+Action: TypeAlias = np.ndarray
 
 
 def compute_valid_move_mask(observation: Observation) -> np.ndarray:

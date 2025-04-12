@@ -22,7 +22,7 @@ class ExpanderAgent(Agent):
 
         # Skip the turn if there are no valid moves.
         if len(valid_moves) == 0:
-            return Action(to_pass=True)
+            return np.array([1, 0, 0, 0, 0], dtype=np.int32)  # Pass action
 
         army_mask = observation.armies
         opponent_mask = observation.opponent_cells
@@ -53,7 +53,8 @@ class ExpanderAgent(Agent):
             move_index = np.random.choice(len(valid_moves))
             move = valid_moves[move_index]
 
-        action = Action(to_pass=False, row=move[0], col=move[1], direction=move[2], to_split=False)
+        # action = Action(to_pass=False, row=move[0], col=move[1], direction=move[2], to_split=False)
+        action = np.array([0, move[0], move[1], move[2], 0], dtype=np.int32)
         return action
 
     def reset(self):

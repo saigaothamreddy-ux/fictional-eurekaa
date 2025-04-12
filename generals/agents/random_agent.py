@@ -28,7 +28,7 @@ class RandomAgent(Agent):
         # Skip the turn if there are no valid moves.
         valid_moves = np.argwhere(mask == 1)
         if len(valid_moves) == 0:
-            return Action(to_pass=True)
+            return np.array([1, 0, 0, 0, 0], dtype=np.int32)  # Pass action
 
         to_pass = 1 if np.random.rand() <= self.idle_probability else 0
         to_split = 1 if np.random.rand() <= self.split_probability else 0
@@ -37,7 +37,8 @@ class RandomAgent(Agent):
         (row, col) = valid_moves[move_index][:2]
         direction = valid_moves[move_index][2]
 
-        action = Action(to_pass, row, col, direction, to_split)
+        # action = Action(to_pass, row, col, direction, to_split)
+        action = np.array([to_pass, row, col, direction, to_split], dtype=np.int32)
         return action
 
     def reset(self):
